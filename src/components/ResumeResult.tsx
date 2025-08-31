@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { ResumeResultType } from "../app/page";
 
 interface Props {
-  data: any;
+  data: ResumeResultType;
 }
+
 
 const ResumeResult: React.FC<Props> = ({ data }) => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -200,11 +202,11 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
         <div>
           <h4 className="font-medium text-gray-700 mb-3">Top Matched Keywords</h4>
           <div className="flex flex-wrap gap-2">
-            {ats_analysis.top_matched_keywords.slice(0, 10).map((k: any, idx: number) => (
-              <span key={idx} className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
-                {k[0]}
-              </span>
-            ))}
+            {ats_analysis.top_matched_keywords.slice(0, 10).map(([keyword, _score], idx) => (
+  <span key={idx} className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
+    {keyword}
+  </span>
+))}
           </div>
         </div>
         <div>

@@ -1,9 +1,10 @@
 import { useState, useRef } from "react";
 import axios from "axios";
-import { Upload, FileText, Briefcase, AlertCircle, CheckCircle } from "lucide-react";
+import { Upload, CheckCircle } from "lucide-react";
+import { ResumeResultType } from "../app/page"; // or define it here
 
 interface Props {
-  onResult: (data: any) => void;
+  onResult: (data: ResumeResultType) => void;
 }
 
 const ResumeUploader: React.FC<Props> = ({ onResult }) => {
@@ -42,33 +43,37 @@ const ResumeUploader: React.FC<Props> = ({ onResult }) => {
   };
 
   const handleSubmit = async () => {
-    if (!file || !jobDescription) {
-      setError("Please upload a resume and provide a job description.");
-      return;
-    }
+  if (!file || !jobDescription) {
+    setError("Please upload a resume and provide a job description.");
+    return;
+  }
 
-    setLoading(true);
-    setError("");
+  setLoading(true);
+  setError("");
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("job_description", jobDescription);
-    formData.append("job_title", jobTitle);
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("job_description", jobDescription);
+  formData.append("job_title", jobTitle);
 
-    try {
-      const response = await axios.post(
-        "https://ai-resume-analyser-backend-vs6n.onrender.com/analyze_resume",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-      onResult(response.data.data);
-    } catch (err: any) {
-      console.error(err);
-      setError(err.response?.data?.detail || "Analysis failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const response = await axios.post(
+      "https://ai-resume-analyser-backend-vs6n.onrender.com/analyze_resume",
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+    onResult(response.data.data);
+  } catch (err: unknown) {
+    const errorMessage =
+      axios.isAxiosError(err) && err.response?.data?.detail
+        ? err.response.data.detail
+        : "Analysis failed. Please try again.";
+    console.error(err);
+    setError(errorMessage);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const triggerFileInput = () => {
     if (fileInputRef.current) {
