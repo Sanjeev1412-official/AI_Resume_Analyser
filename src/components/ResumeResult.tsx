@@ -200,21 +200,21 @@ const ResumeResult: React.FC<ResumeResultProps> = ({ data }) => {
         <div>
           <h4 className="font-medium text-gray-700 mb-3">Top Matched Keywords</h4>
           <div className="flex flex-wrap gap-2">
-            {ats_analysis.top_matched_keywords.slice(0, 10).map((k, idx) => (
-              <span key={idx} className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
-                {k[0]}
-              </span>
-            ))}
+            {ats_analysis.top_matched_keywords.slice(0, 10).map((k: [string, number], idx: number) => (
+  <span key={idx} className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
+    {k[0]}
+  </span>
+))}
           </div>
         </div>
         <div>
           <h4 className="font-medium text-gray-700 mb-3">Missing Keywords</h4>
           <div className="flex flex-wrap gap-2">
-            {ats_analysis.missing_jd_keywords.slice(0, 10).map((k, idx) => (
-              <span key={idx} className="px-3 py-1.5 bg-red-50 text-red-700 rounded-full text-sm font-medium">
-                {k}
-              </span>
-            ))}
+            {ats_analysis.missing_jd_keywords.slice(0, 10).map((k: string, idx: number) => (
+  <span key={idx} className="px-3 py-1.5 bg-red-50 text-red-700 rounded-full text-sm font-medium">
+    {k}
+  </span>
+))}
           </div>
         </div>
       </div>
@@ -274,11 +274,11 @@ const ResumeResult: React.FC<ResumeResultProps> = ({ data }) => {
             Key Strengths
           </h4>
           <ul className="space-y-2">
-            {hr_evaluation.key_strengths.map((s, idx) => (
-              <li key={idx} className="text-sm text-green-700">
-                <span className="font-medium">{s.area}:</span> {s.strength} ({s.impact_score} Impact)
-              </li>
-            ))}
+            {hr_evaluation.key_strengths.map((s: { area: string; strength: string; impact_score: number }, idx: number) => (
+  <li key={idx} className="text-sm text-green-700">
+    <span className="font-medium">{s.area}:</span> {s.strength} ({s.impact_score} Impact)
+  </li>
+))}
           </ul>
         </div>
 
@@ -290,11 +290,11 @@ const ResumeResult: React.FC<ResumeResultProps> = ({ data }) => {
             Critical Gaps
           </h4>
           <ul className="space-y-2">
-            {hr_evaluation.critical_gaps.map((g, idx) => (
-              <li key={idx} className="text-sm text-red-700">
-                <span className="font-medium">{g.gap_category} ({g.severity}):</span> {g.gap_description}
-              </li>
-            ))}
+            {hr_evaluation.critical_gaps.map((g: { gap_category: string; gap_description: string; severity: string }, idx: number) => (
+  <li key={idx} className="text-sm text-red-700">
+    <span className="font-medium">{g.gap_category} ({g.severity}):</span> {g.gap_description}
+  </li>
+))}
           </ul>
         </div>
       </div>
