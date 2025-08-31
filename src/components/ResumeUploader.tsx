@@ -1,12 +1,14 @@
+"use client";
 import { useState, useRef } from "react";
 import axios from "axios";
-import { Upload, FileText, Briefcase, AlertCircle, CheckCircle } from "lucide-react";
+import { Upload, CheckCircle } from "lucide-react";
+import { ResumeAnalysisData } from "@/types/resume";
 
-interface Props {
-  onResult: (data: any) => void;
+interface ResumeUploaderProps {
+  onResult: (data: ResumeAnalysisData) => void;
 }
 
-const ResumeUploader: React.FC<Props> = ({ onResult }) => {
+const ResumeUploader: React.FC<ResumeUploaderProps> = ({ onResult }) => {
   const [file, setFile] = useState<File | null>(null);
   const [jobDescription, setJobDescription] = useState("");
   const [jobTitle, setJobTitle] = useState("Software Developer");
@@ -56,15 +58,19 @@ const ResumeUploader: React.FC<Props> = ({ onResult }) => {
     formData.append("job_title", jobTitle);
 
     try {
-      const response = await axios.post(
+      const response = await axios.post<{ data: ResumeAnalysisData }>(
         "https://ai-resume-analyser-backend-vs6n.onrender.com/analyze_resume",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
       onResult(response.data.data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.response?.data?.detail || "Analysis failed. Please try again.");
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.detail || "Analysis failed. Please try again.");
+      } else {
+        setError("Analysis failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -79,8 +85,6 @@ const ResumeUploader: React.FC<Props> = ({ onResult }) => {
   return (
     <div className="max-w-2xl mx-auto mt-10 bg-white rounded-xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-xl">
       <div className="px-8 py-15">
-
-
         {/* File Upload Area */}
         <div 
           className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200 ${
@@ -99,7 +103,6 @@ const ResumeUploader: React.FC<Props> = ({ onResult }) => {
             className="hidden"
           />
           <div className="flex flex-col items-center justify-center space-y-3">
-            
             <div className="text-gray-600">
               {file ? (
                 <div className="flex items-center justify-center space-x-3">
@@ -112,14 +115,14 @@ const ResumeUploader: React.FC<Props> = ({ onResult }) => {
               ) : (
                 <>
                   <div>
-                  <Upload className={`w-12 h-12 mx-auto mb-4 transition-colors text-gray-400`} />
-                  <p className="text-lg font-medium text-gray-700 mb-2">
-                    Drop your resume here or click to browse
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Supports PDF, TXT, and DOCX files
-                  </p>
-                </div>
+                    <Upload className="w-12 h-12 mx-auto mb-4 transition-colors text-gray-400" />
+                    <p className="text-lg font-medium text-gray-700 mb-2">
+                      Drop your resume here or click to browse
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Supports PDF, TXT, and DOCX files
+                    </p>
+                  </div>
                 </>
               )}
             </div>

@@ -1,19 +1,19 @@
 "use client";
-
 import { useState } from "react";
+import { ResumeAnalysisData } from "@/types/resume";
 
-interface Props {
-  data: any;
+interface ResumeResultProps {
+  data: ResumeAnalysisData;
 }
 
-const ResumeResult: React.FC<Props> = ({ data }) => {
+const ResumeResult: React.FC<ResumeResultProps> = ({ data }) => {
   const [activeTab, setActiveTab] = useState("overview");
   
   if (!data) return null;
 
   const { resume_summary, hr_evaluation, ats_analysis } = data;
 
-  // Calculate score percentages for visual indicators (using scores directly as percent)
+  // Calculate score percentages for visual indicators
   const overallScorePercent = ats_analysis.overall_score;
   const keywordScorePercent = ats_analysis.keyword_score;
   const structureScorePercent = ats_analysis.structure_score;
@@ -31,9 +31,9 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
     const strokeDashoffset = circumference - (percent / 100) * circumference;
     
     const getColor = (p: number) => {
-      if (p >= 80) return "#10B981"; // green
-      if (p >= 60) return "#F59E0B"; // amber
-      return "#EF4444"; // red
+      if (p >= 80) return "#10B981";
+      if (p >= 60) return "#F59E0B";
+      return "#EF4444";
     };
 
     return (
@@ -200,7 +200,7 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
         <div>
           <h4 className="font-medium text-gray-700 mb-3">Top Matched Keywords</h4>
           <div className="flex flex-wrap gap-2">
-            {ats_analysis.top_matched_keywords.slice(0, 10).map((k: any, idx: number) => (
+            {ats_analysis.top_matched_keywords.slice(0, 10).map((k, idx) => (
               <span key={idx} className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
                 {k[0]}
               </span>
@@ -210,7 +210,7 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
         <div>
           <h4 className="font-medium text-gray-700 mb-3">Missing Keywords</h4>
           <div className="flex flex-wrap gap-2">
-            {ats_analysis.missing_jd_keywords.slice(0, 10).map((k: string, idx: number) => (
+            {ats_analysis.missing_jd_keywords.slice(0, 10).map((k, idx) => (
               <span key={idx} className="px-3 py-1.5 bg-red-50 text-red-700 rounded-full text-sm font-medium">
                 {k}
               </span>
@@ -222,7 +222,7 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
       <div className="mt-8">
         <h4 className="font-medium text-gray-700 mb-3">Structure Analysis</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Object.entries(ats_analysis.structure_analysis).map(([key, value]: [string, any]) => (
+          {Object.entries(ats_analysis.structure_analysis).map(([key, value]) => (
             <div key={key} className="flex items-center">
               <svg className={`w-5 h-5 mr-2 ${value ? 'text-green-600' : 'text-red-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={value ? "M5 13l4 4L19 7" : "M6 18L18 6M6 6l12 12"}></path>
@@ -274,7 +274,7 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
             Key Strengths
           </h4>
           <ul className="space-y-2">
-            {hr_evaluation.key_strengths.map((s: any, idx: number) => (
+            {hr_evaluation.key_strengths.map((s, idx) => (
               <li key={idx} className="text-sm text-green-700">
                 <span className="font-medium">{s.area}:</span> {s.strength} ({s.impact_score} Impact)
               </li>
@@ -290,7 +290,7 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
             Critical Gaps
           </h4>
           <ul className="space-y-2">
-            {hr_evaluation.critical_gaps.map((g: any, idx: number) => (
+            {hr_evaluation.critical_gaps.map((g, idx) => (
               <li key={idx} className="text-sm text-red-700">
                 <span className="font-medium">{g.gap_category} ({g.severity}):</span> {g.gap_description}
               </li>
@@ -305,7 +305,7 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
           <div className="bg-white p-3 rounded border border-blue-200">
             <h5 className="font-medium text-blue-700 mb-2">Requirements Met</h5>
             <ul className="space-y-1 text-sm text-gray-600">
-              {hr_evaluation.jd_alignment_analysis.requirements_met.map((r: string, idx: number) => (
+              {hr_evaluation.jd_alignment_analysis.requirements_met.map((r, idx) => (
                 <li key={idx}>{r}</li>
               ))}
             </ul>
@@ -313,7 +313,7 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
           <div className="bg-white p-3 rounded border border-blue-200">
             <h5 className="font-medium text-blue-700 mb-2">Partially Met</h5>
             <ul className="space-y-1 text-sm text-gray-600">
-              {hr_evaluation.jd_alignment_analysis.requirements_partially_met.map((r: string, idx: number) => (
+              {hr_evaluation.jd_alignment_analysis.requirements_partially_met.map((r, idx) => (
                 <li key={idx}>{r}</li>
               ))}
             </ul>
@@ -321,7 +321,7 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
           <div className="bg-white p-3 rounded border border-blue-200">
             <h5 className="font-medium text-blue-700 mb-2">Requirements Missing</h5>
             <ul className="space-y-1 text-sm text-gray-600">
-              {hr_evaluation.jd_alignment_analysis.requirements_missing.map((r: string, idx: number) => (
+              {hr_evaluation.jd_alignment_analysis.requirements_missing.map((r, idx) => (
                 <li key={idx}>{r}</li>
               ))}
             </ul>
@@ -383,7 +383,7 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
                 <div className="bg-white p-4 rounded-lg border border-blue-200">
                   <h5 className="font-medium text-blue-700 mb-2">Requirements Met</h5>
                   <ul className="space-y-1 text-sm text-gray-600">
-                    {hr_evaluation.jd_alignment_analysis.requirements_met.map((r: string, idx: number) => (
+                    {hr_evaluation.jd_alignment_analysis.requirements_met.map((r, idx) => (
                       <li key={idx}>{r}</li>
                     ))}
                   </ul>
@@ -391,7 +391,7 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
                 <div className="bg-white p-4 rounded-lg border border-blue-200">
                   <h5 className="font-medium text-blue-700 mb-2">Partially Met</h5>
                   <ul className="space-y-1 text-sm text-gray-600">
-                    {hr_evaluation.jd_alignment_analysis.requirements_partially_met.map((r: string, idx: number) => (
+                    {hr_evaluation.jd_alignment_analysis.requirements_partially_met.map((r, idx) => (
                       <li key={idx}>{r}</li>
                     ))}
                   </ul>
@@ -399,7 +399,7 @@ const ResumeResult: React.FC<Props> = ({ data }) => {
                 <div className="bg-white p-4 rounded-lg border border-blue-200">
                   <h5 className="font-medium text-blue-700 mb-2">Requirements Missing</h5>
                   <ul className="space-y-1 text-sm text-gray-600">
-                    {hr_evaluation.jd_alignment_analysis.requirements_missing.map((r: string, idx: number) => (
+                    {hr_evaluation.jd_alignment_analysis.requirements_missing.map((r, idx) => (
                       <li key={idx}>{r}</li>
                     ))}
                   </ul>
