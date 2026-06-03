@@ -1,6 +1,41 @@
-# AI Resume Analyser - Frontend 🖥️
+# AI Resume Analyser - Web Client 🖥️
 
-This is the frontend client for the AI Resume Analyser, built using [Next.js](https://nextjs.org/) and TypeScript. It provides a clean, user-friendly UI/UX for uploading resumes and viewing the AI-generated analysis.
+This directory houses the presentation layer of the application. It is constructed as a modern, statically typed **Next.js** SPA/SSR engine optimized for fluid user interactions, immediate feedback loops, and highly accessible dashboard interfaces.
+
+---
+
+## 💡 Key Architectural Pillars (For Technical Reviewers)
+
+*   **Explicit TypeScript Contracts**: Zero usage of `any`. Every piece of data incoming from the AI microservice maps cleanly to immutable interfaces defined in `src/types/resume.ts`.
+*   **Modular Component Pattern**: UI components like `ResumeUploader` and `ResumeResult` are fully decoupled. They handle isolated states, making them simple to unit test and maintain.
+*   **Optimal UX/UI Design**: Built with a sleek, cinematic professional aesthetic featuring intentional loading animations, clear visual error processing, and fully responsive layouts that render beautifully across mobile and desktop.
+*   **Strict Styling Architecture**: Utilizes PostCSS and Tailwind CSS utility tokens to eliminate heavy, unmaintainable stylesheets and guarantee uniform global design constants.
+
+---
+
+## 🛠️ Core Technology Stack
+
+*   **Framework**: Next.js (App Router architecture)
+*   **Language**: TypeScript (Strict-mode compliant)
+*   **Style Engine**: Tailwind CSS + PostCSS
+*   **Linter/Formatter**: ESLint + Prettier configuration
+
+---
+
+## 📂 Structural Codebase Breakdown
+
+```bash
+   src/
+   ├── app/
+   │   ├── globals.css      # Core style variables, animations, and typography tokens
+   │   ├── layout.tsx       # Root wrapper initializing metadata and viewport controls
+   │   └── page.tsx         # The main dashboard orchestration viewport
+   ├── components/
+   │   ├── ResumeUploader.tsx # Handles drag-and-drop logic, local client validations, and HTTP POST actions
+   │   └── ResumeResult.tsx   # Renders the parsed AI payloads, ATS score trackers, and skill badges
+   └── types/
+   └── resume.ts        # Enforces type-safety interfaces matching backend JSON payloads
+```
 
 ## 📦 Prerequisites
 
