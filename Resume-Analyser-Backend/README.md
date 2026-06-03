@@ -35,3 +35,53 @@ This project helps **recruiters, HR teams, and candidates** quickly assess resum
 ### 🔹 Health Check
 ```http
 GET /health
+```
+
+## 💡 Technical Design Strengths
+
+*   **Stateless REST Architecture**: The server does not maintain session file-system state. Files are processed cleanly out of incoming memory buffers, optimizing horizontal scaling across stateless compute engines.
+*   **Strict Error Boundaries**: Safe handling of corrupted uploads, unreadable PDF layers, and LLM rate-limiting exceptions via standardized fallback handlers.
+*   **Deterministic Prompt Engineering**: System instructions utilize structural formatting directives to force LLM models to output valid, parseable JSON arrays without polluting responses with markdown text blocks.
+*   **Isolated Container Readiness**: Packaged with an explicit Multi-Stage `Dockerfile` ensuring secure, lean container footprint deployments on Kubernetes, Cloud Run, AWS ECS, or Render.
+
+---
+
+## 📂 Structural Codebase Breakdown
+```bash
+Resume-Analyser-Backend/
+├── app.py              # Main execution entry-point containing routing and LLM middleware integrations
+├── requirements.txt    # Frozen pip application dependencies
+└── Dockerfile          # Configuration for containerized production builds
+```
+
+## ⚙️ Direct Setup & Local Server Execution
+Step into the working directory:
+
+```bash
+   cd Resume-Analyser-Backend
+```
+Initialize isolated environment layers:
+
+```bash
+   python -m venv venv
+   source venv/bin/activate
+```
+Acquire frozen application requirements:
+
+```bash
+   pip install -r requirements.txt
+```
+Configure production secrets safely:
+Create a local configuration .env file in this directory:
+
+```bash
+   PORT=5000
+   AI_API_KEY=your_secure_upstream_llm_token_here
+   FLASK_ENV=development
+```
+Fire up the WSGI/ASGI service engine:
+
+```bash
+   python app.py
+```
+The core worker listens natively at http://localhost:5000
